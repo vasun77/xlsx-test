@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+		<meta charset="utf-8">
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.0/shim.min.js"></script>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.0/jszip.js"></script>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.0/xlsx.core.min.js"></script>
+	</head>
+	<body>
+		<h1>sheetjs Demo</h1>
+    <button onclick="javascript:predefined();">Run predefined test</button>
+    <br><p>or</p>
+    <label for="rows">Enter number of rows:</label>
+    <input id="rows" name="rows" value="1" placeholder="Enter number of rows" />
+    <br>
+    <label for="cols">Enter number of columnss:</label>
+    <input id="cols" name="cols" value="1" placeholder="Enter number of Columns" />
+    <br>
+    <button onclick="javascript:runScript();">Run</button>
+    <br>
+    <p id="msg"></p>
+    <ul id="list">
+    </ul>
+		<script type="text/javascript">
+        function runScript() {
+          var startTime = window.performance.now();
+          var limit = document.getElementById('rows').value || 1;
+          var cols = document.getElementById('cols').value || 1;
+          generateExcel(limit, cols);
+          var endTime = window.performance.now();
+          var totalTime = endTime - startTime;
+          document.getElementById('msg').innerHTML = "Total Time taken - "+(totalTime / 1000).toFixed(2)+" seconds.";
+
+        }
+
+        function generateExcel(rows,cols, next) {
+          var wb = XLSX.utils.book_new();
+          var arr = [];
+          for (var i = 1; i <= rows; i++) {
+            arr.push(i);
+          }
+          var allData = arr.map( n => Array.from({length: cols}, () => Math.floor(Math.random() * cols)));
+          var load = XLSX.utils.aoa_to_sheet(
+            allData
+          );
+          XLSX.utils.book_append_sheet(wb, load, "Load");
+			    XLSX.writeFile(wb, "Data-Demo-"+rows+"-rows.xlsx");
+        }
+
+        function predefined() {
+            var startTime = window.performance.now();
+            generateExcel(100, 30);
+            var endTime = window.performance.now();
+            var totalTime = ((endTime - startTime) / 1000).toFixed(2);
+            var li = document.createElement("li");
+            li.innerHTML = "Time Taken for 100 rows and 30 columns "+totalTime+" seconds";
+            document.getElementById('list').appendChild(li);
+            //document.getElementById('list').appendChild("<li>Time Taken for 100 rows and 30 columns "+totalTime+" seconds</li>")
+            startTime = window.performance.now();
+            generateExcel(1000, 30);
+            endTime = window.performance.now();
+            totalTime = ((endTime - startTime) / 1000).toFixed(2);
+            var li = document.createElement("li");
+            li.innerHTML = "Time Taken for 1000 rows and 30 columns "+totalTime+" seconds";
+            document.getElementById('list').appendChild(li);
+            //document.getElementById('list').appendChild("<li>Time Taken for 1000 rows and 30 columns "+totalTime+" seconds</li>")
+            startTime = window.performance.now();
+            generateExcel(10000, 30);
+            endTime = window.performance.now();
+            totalTime = ((endTime - startTime) / 1000).toFixed(2);
+            var li = document.createElement("li");
+            li.innerHTML = "Time Taken for 10000 rows and 30 columns "+totalTime+" seconds";
+            document.getElementById('list').appendChild(li);
+            startTime = window.performance.now();
+            generateExcel(100000, 30);
+            endTime = window.performance.now();
+            totalTime = ((endTime - startTime) / 1000).toFixed(2);
+            var li = document.createElement("li");
+            li.innerHTML = "Time Taken for 100000 rows and 30 columns "+totalTime+" seconds";
+            document.getElementById('list').appendChild(li);
+            //document.getElementById('list').appendChild("<li>Time Taken for 100000 rows and 30 columns "+totalTime+" seconds</li>")
+        }
+
+   </script>
+ </body>
+</html>
